@@ -1,4 +1,7 @@
-def calculating_platforms(weight_list: list[int], weight_limit: int) -> str:
+# 132817447 - первая итерация.
+# 132878393 - вторая итерация (Актуальная, после 1го ревью).
+
+def calculating_platforms(weight_list: list[int], weight_limit: int) -> int:
     """Функция вычисляет необходимое количество платформ для транспортировки
     роботов. Ограничение - не более 2х роботов, по условию.
 
@@ -7,23 +10,24 @@ def calculating_platforms(weight_list: list[int], weight_limit: int) -> str:
     - weight_limit: int - максимальная нагрузка на платформу.
 
     Возвращает:
-    - объект str. - количество платформ, в виде строки для записи в файл.
+    - объект int. - количество платформ.
 
     Сортирует список и попарно сравнивает самый тяжелый с легким объекты.
     На платформу всегда грузится самый тяжелый объект, смещая правую границу.
     Если на платформу можно поместить и самый лёгкий объект,
     смещаются обе границы."""
 
-    weight_list.sort()
+    ordered_weights = sorted(weight_list)
     count: int = 0
-    left: int = 0
-    right: int = len(weight_list) - 1
-    while left <= right:
-        if weight_list[left] + weight_list[right] <= weight_limit:
-            left += 1
-        right -= 1
+    lightest_robot: int = 0
+    heaviest_robot: int = len(weight_list) - 1
+    while lightest_robot <= heaviest_robot:
+        if (ordered_weights[lightest_robot] + ordered_weights[heaviest_robot]
+                <= weight_limit):
+            lightest_robot += 1
+        heaviest_robot -= 1
         count += 1
-    return str(count)
+    return count
 
 
 if __name__ == '__main__':
@@ -32,4 +36,4 @@ if __name__ == '__main__':
         max_weight = int(file_in.readline())
     result = calculating_platforms(weights, max_weight)
     with open('output.txt', 'w') as file_out:
-        file_out.write(result)
+        file_out.write(str(result))
